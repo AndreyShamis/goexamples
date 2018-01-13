@@ -87,9 +87,19 @@ func deleteBook(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func printStart() (string) {
+	log.Printf("Starting application.")
+	return "Starting application."
+}
+
+func printEnd()(string){
+	log.Printf("Finishing application.")
+	return "Finishing application."
+}
+
 // Main function
 func main() {
-	log.Printf("Starting application.")
+	printStart()
 	// Init router
 	r := mux.NewRouter()
 
@@ -107,7 +117,7 @@ func main() {
 
 	// Start server
 	log.Fatal(http.ListenAndServe(":8000", r))
-	log.Printf("Finishing application.")
+	printEnd()
 }
 
 // Request sample
