@@ -89,6 +89,7 @@ func deleteBook(w http.ResponseWriter, r *http.Request) {
 
 // Main function
 func main() {
+	log.Printf("Starting application.")
 	// Init router
 	r := mux.NewRouter()
 
@@ -96,6 +97,7 @@ func main() {
 	books = append(books, Book{ID: "1", Isbn: "438227", Title: "Book One", Author: &Author{Firstname: "John", Lastname: "Doe"}})
 	books = append(books, Book{ID: "2", Isbn: "454555", Title: "Book Two", Author: &Author{Firstname: "Steve", Lastname: "Smith"}})
 
+	log.Printf("Route handles & endpoints.")
 	// Route handles & endpoints
 	r.HandleFunc("/books", getBooks).Methods("GET")
 	r.HandleFunc("/books/{id}", getBook).Methods("GET")
@@ -105,6 +107,7 @@ func main() {
 
 	// Start server
 	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Printf("Finishing application.")
 }
 
 // Request sample
