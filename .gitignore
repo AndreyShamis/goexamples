@@ -4,6 +4,7 @@
 
 gobuild
 golang
+main
 
 *.test
 
