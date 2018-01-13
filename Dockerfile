@@ -26,4 +26,5 @@ WORKDIR /app
 RUN go get -u -t github.com/gorilla/mux
 RUN go get -u -t github.com/gorilla/context
 RUN go build -o main .
+RUN go test -v ./...
 CMD ["/app/main"]
