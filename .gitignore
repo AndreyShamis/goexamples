@@ -10,3 +10,4 @@ golang
 *.out
 
 .idea/
+.idea
