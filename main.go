@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"os/exec"
 	"encoding/json"
 	"log"
 	"math/rand"
@@ -95,11 +97,30 @@ func printEnd()(string){
 	log.Printf("Finishing application.")
 	return "Finishing application."
 }
+//
+//func execute(cmd string, wg *sync.WaitGroup) {
+//	fmt.Println("command is ",cmd)
+//	// splitting head => g++ parts => rest of the command
+//	parts := strings.Fields(cmd)
+//	head := parts[0]
+//	parts = parts[1:len(parts)]
+//
+//	out, err := exec.Command(head,parts...).Output()
+//	if err != nil {
+//		fmt.Printf("%s", err)
+//	}
+//	fmt.Printf("%s", out)
+//	wg.Done() // Need to signal to waitgroup that this goroutine is done
+//}
 
 // Main function
 func main() {
 	printStart()
+	cmd := "ifconfig"
+	out, err := exec.Command("sh","-c",cmd).Output()
+	log.Printf("out: %s , err : %s", out, err)
 	// Init router
+	bind := flag.String("l", "0.0.0.0:8000", "listen on ip:port")
 	r := mux.NewRouter()
 
 	// Hardcoded data - @todo: add database
@@ -108,14 +129,14 @@ func main() {
 
 	log.Printf("Route handles & endpoints.")
 	// Route handles & endpoints
-	r.HandleFunc("/books", getBooks).Methods("GET")
-	r.HandleFunc("/books/{id}", getBook).Methods("GET")
-	r.HandleFunc("/books", createBook).Methods("POST")
-	r.HandleFunc("/books/{id}", updateBook).Methods("PUT")
-	r.HandleFunc("/books/{id}", deleteBook).Methods("DELETE")
-
+	r.HandleFunc("/", getBooks).Methods("GET")
+	r.HandleFunc("/{id}", getBook).Methods("GET")
+	r.HandleFunc("/", createBook).Methods("POST")
+	r.HandleFunc("/{id}", updateBook).Methods("PUT")
+	r.HandleFunc("/{id}", deleteBook).Methods("DELETE")
+	log.Printf("Listening on http://%s.", *bind)
 	// Start server
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(*bind, r))
 	printEnd()
 }
 
