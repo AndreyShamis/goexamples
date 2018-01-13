@@ -112,20 +112,23 @@ func printEnd()(string){
 //	fmt.Printf("%s", out)
 //	wg.Done() // Need to signal to waitgroup that this goroutine is done
 //}
-
+func getIfconfig() (string,  error){
+	cmd := "ifconfig"
+	out, err := exec.Command("sh","-c",cmd).Output()
+	return string(out), err
+}
 // Main function
 func main() {
 	printStart()
-	cmd := "ifconfig"
-	out, err := exec.Command("sh","-c",cmd).Output()
+	out, err := getIfconfig()
 	log.Printf("out: %s , err : %s", out, err)
 	// Init router
 	bind := flag.String("l", "0.0.0.0:8000", "listen on ip:port")
 	r := mux.NewRouter()
 
 	// Hardcoded data - @todo: add database
-	books = append(books, Book{ID: "1", Isbn: "438227", Title: "Book One", Author: &Author{Firstname: "John", Lastname: "Doe"}})
-	books = append(books, Book{ID: "2", Isbn: "454555", Title: "Book Two", Author: &Author{Firstname: "Steve", Lastname: "Smith"}})
+	books = append(books, Book{ID: "1", Isbn: "978-5-389-04926-0", Title: "Crime and Punishment", Author: &Author{Firstname: "Fyodor", Lastname: "Dostoyevsky"}})
+	books = append(books, Book{ID: "2", Isbn: "454555", Title: "Another book example", Author: &Author{Firstname: "Hello", Lastname: "World"}})
 
 	log.Printf("Route handles & endpoints.")
 	// Route handles & endpoints
