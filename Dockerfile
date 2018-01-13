@@ -5,8 +5,14 @@
 # the build of your app defined in this Dockerfile will behave exactly the same wherever it runs.
 
 
+#FROM ubuntu:16.04
+#RUN apt-get update
+#ENV DEBIAN_FRONTEND noninteractive
+#RUN apt-get install -y apt-utils
+#RUN apt-get install -y net-tools
 # Use an official Python runtime as a parent image
 FROM golang:latest
+
 RUN mkdir /app
 
 #Install any needed packages specified in requirements.txt
@@ -24,7 +30,11 @@ WORKDIR /app
 #ENV NAME World
 
 RUN go get -u -t github.com/gorilla/mux
-RUN go get -u -t github.com/gorilla/context
+#RUN go get -u -t github.com/gorilla/context
 RUN go build -o main .
+RUN apt-get update
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get install -y apt-utils
+RUN apt-get install -y net-tools
 RUN go test -v ./...
 CMD ["/app/main"]
